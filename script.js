@@ -1,31 +1,23 @@
 let api_url = 'http://localhost:8000/api/v1/titles/';
 
-let app = document.getElementById('bloc_page');
+let best_rated = document.getElementById('best_rated');
 
-let best_rated = document.createElement('div');
-best_rated.setAttribute('class', 'best_rated');
-app.appendChild(best_rated);
+let top_ratings = document.getElementById('top_ratings');
 
-let top_ratings = document.createElement('div');
-top_ratings.setAttribute('class', 'top_ratings');
-app.appendChild(top_ratings);
+let comedy = document.getElementById('comedy');
 
-let comedy = document.createElement('div');
-comedy.setAttribute('class', 'comedy');
-app.appendChild(comedy);
+let thriller = document.getElementById('thriller');
 
-let thriller = document.createElement('div');
-thriller.setAttribute('class', 'thriller');
-app.appendChild(thriller);
+let horror = document.getElementById('horror');
 
-let horror = document.createElement('div');
-horror.setAttribute('class', 'horror');
-app.appendChild(horror);
-
+// array to store best rated movie
 let best_movie =[]
+//array to store categories elements to be displayed
 let elements = [top_ratings, comedy, thriller, horror]
+//array that store arrays of movies objects, by category
 let movies = [[], [], [], []]
 
+//array of arrays : [number of movie to find, api search term]
 let searchs = [
     [8, '?sort_by=-imdb_score'],
     [7, '?genre=comedy&sort_by=-imdb_score'],
@@ -39,7 +31,6 @@ function get_movies (nb_movies, url, target){
     page_to_search = nb_movies%5;
     let request = new XMLHttpRequest();
 
-    //loop for parsing different pages of results
     request.open('GET', url, true);
     request.onload = function () {
         let data = JSON.parse(request.response);
@@ -47,10 +38,12 @@ function get_movies (nb_movies, url, target){
             let results = data.results;
             movies_parsing(nb_movies, results, target);
         }
+        // check to see if all movies have been parsed
         if (movies[target].length < nb_movies){
             url = data.next;
             get_movies(nb_movies, url, target)
         }else{
+            // if getting top rated movies, move the best one
             if (target === 0){
                 move_best_movie();
             }
@@ -70,21 +63,30 @@ function movies_parsing(nb_movies, data, target){
     }
 }
 
+
+// function to move the movie with the best imdb score into its own element
 function move_best_movie(){
     best_movie[0] = movies[0][0];
+
     movies[0].shift();
+
     contener = document.createElement('span');
     contener.setAttribute('class', 'contener');
+
     h1 = document.createElement('h1');
     h1.textContent = "Meilleur film";
+
     contener.appendChild(h1);
+
     let img = document.createElement('img');
     img.setAttribute('src',best_movie[0].image_url);
+
     contener.appendChild(img);
     best_rated.appendChild(contener);
 }
 
 
+// function for looping through categories
 function parsing() {
     for (i = 0; i < searchs.length; i++) {
         get_movies(searchs[i][0], api_url + searchs[i][1], i);
@@ -92,19 +94,18 @@ function parsing() {
 }
 
 
+//function to create elements for displaying movies
 function create_display(target){
-    categories = ['Mieux noté', 'comédie', 'thriller', 'horreur'];
     contener = document.createElement('div');
     contener.setAttribute('class', 'contener');
-    h1 = document.createElement('h1');
-    h1.textContent = categories[target];
-    contener.appendChild(h1);
+
     for (movie of movies[target]){
         let mini = document.createElement('span');
         let img = document.createElement('img');
          img.setAttribute('src',movie.image_url);
+
          mini.appendChild(img);
-         contener.appendChild(mini)
+         contener.appendChild(mini);
     }
     elements[target].appendChild(contener);
 }
@@ -114,4 +115,45 @@ function main(){
     parsing()
 }
 
+let tr_left = document.getElementById('tr_right');
+tr_left.onclick = function (){
+    top_ratings.scrollLeft +=250;
+}
+
+let tr_right = document.getElementById('tr_left');
+tr_right.onclick = function (){
+    top_ratings.scrollLeft -=250;
+}
+
+let c_left = document.getElementById('c_right');
+c_left.onclick = function (){
+    comedy.scrollLeft +=250;
+}
+
+let c_right = document.getElementById('c_left');
+c_right.onclick = function (){
+    comedy.scrollLeft -=250;
+}
+
+let t_left = document.getElementById('t_right');
+t_left.onclick = function (){
+    thriller.scrollLeft +=250;
+}
+
+let t_right = document.getElementById('t_left');
+t_right.onclick = function (){
+    thriller.scrollLeft -=250;
+}
+
+let h_left = document.getElementById('h_right');
+h_left.onclick = function (){
+    horror.scrollLeft +=250;
+}
+
+let h_right = document.getElementById('h_left');
+h_right.onclick = function (){
+    horror.scrollLeft -=250;
+}
+
 main()
+
