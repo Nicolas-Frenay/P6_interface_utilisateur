@@ -80,6 +80,10 @@ function move_best_movie(){
 
     let img = document.createElement('img');
     img.setAttribute('src',best_movie[0].image_url);
+    img.setAttribute("id", best_movie[0].id)
+    img.onclick = function (){
+        movie_infos(img.id);
+    }
 
     contener.appendChild(img);
     best_rated.appendChild(contener);
@@ -96,13 +100,17 @@ function parsing() {
 
 //function to create elements for displaying movies
 function create_display(target){
-    contener = document.createElement('div');
+    let contener = document.createElement('div');
     contener.setAttribute('class', 'contener');
 
     for (movie of movies[target]){
         let mini = document.createElement('span');
         let img = document.createElement('img');
-         img.setAttribute('src',movie.image_url);
+        img.setAttribute('src',movie.image_url);
+        img.setAttribute("id", movie.id)
+        img.onclick = function (){
+            movie_infos(img.id);
+        }
 
          mini.appendChild(img);
          contener.appendChild(mini);
@@ -110,11 +118,7 @@ function create_display(target){
     elements[target].appendChild(contener);
 }
 
-
-function main(){
-    parsing()
-}
-
+//Scrolling buttons functions
 let tr_left = document.getElementById('tr_right');
 tr_left.onclick = function (){
     top_ratings.scrollLeft +=250;
@@ -154,6 +158,83 @@ let h_right = document.getElementById('h_left');
 h_right.onclick = function (){
     horror.scrollLeft -=250;
 }
+
+
+function main(){
+    parsing()
+}
+
+//loading content in modal window
+function movie_infos(id){
+    let modal = document.getElementById('modal');
+    let btn = document.getElementById('modal_close');
+
+    modal.style.display = "flex";
+
+    btn.onclick = function (){
+        modal.style.display = "none";
+    }
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+
+    let request = new XMLHttpRequest();
+    request.open('GET', api_url + id, true);
+    request.onload = function () {
+        let data = JSON.parse(request.response);
+        if (request.status === 200) {
+            let picture = document.getElementById('modal_movie_picture');
+            picture.setAttribute('src', data.image_url);
+
+            let title = document.getElementById('modal_title');
+            title.textContent = data.title;
+
+            let duration = document.getElementById('modal_duration');
+            duration.textContent = data.duration + ' minutes'
+
+            let genre = document.getElementById('modal_genre');
+            genre.textContent = data.genres
+
+            let date = document.getElementById('modal_date');
+            date.textContent = data.year;
+
+            let country = document.getElementById('modal_country');
+            country.textContent = 'Pays : ' + data.countries;
+
+            let rated = document.getElementById('modal_rated');
+            rated.textContent = 'Classement : ' + data.rated;
+
+            let imdb = document.getElementById('modal_imdb');
+            imdb.textContent = 'IMDB : ' + data.imdb_score;
+
+            let director = document.getElementById('modal_director');
+            director.textContent = 'réalisateur(s) : ' + data.directors;
+
+            let actors = document.getElementById('modal_actors');
+            actors.textContent = 'Comédien(ne)s : ' + data.actors;
+
+            let box_office = document.getElementById('modal_box_office');
+            if (data.worldwide_gross_income) {
+                box_office.textContent = 'Résultats au box-office (mondial) : '
+                    + data.worldwide_gross_income.toLocaleString() + ' $';
+            } else {
+                box_office.textContent = '';
+            }
+
+            let desc = document.getElementById('modal_description');
+            if (data.long_description.length > 1) {
+                desc.textContent = "Résumé : " + data.long_description;
+            } else {
+                desc.textContent = "Aucun résumé disponible"
+            }
+        }
+    }
+    request.send()
+}
+
 
 main()
 
