@@ -8,15 +8,19 @@
 
 <body>
     <div id="bloc_page">
-        <div id="best_rated"></div>
+        <div id="best_rated">
+            <h1>Meilleur film</h1>
+            <img id="best_movie_picture" src = "/./.:0" alt="Just stream it !">
+
+        </div>
         <div class="wrapper">
             <div class="cat">
                 <h1>Films les mieux notés</h1>
                 <div class="content">
                     <div class="scroller">
-                        <button id="tr_left"><</button>
+                        <button id="tr_left">&lt;</button>
                         <div id="top_ratings" class="row"></div>
-                        <button id="tr_right">></button>
+                        <button id="tr_right">&gt;</button>
                     </div>
                 </div>
             </div>
@@ -24,9 +28,9 @@
                 <h1>Comédies</h1>
                 <div class="content">
                     <div class="scroller">
-                        <button id="c_left"><</button>
+                        <button id="c_left">&lt;</button>
                         <div id="comedy" class="row"></div>
-                        <button id="c_right">></button>
+                        <button id="c_right">&gt;</button>
                     </div>
                 </div>
             </div>
@@ -34,9 +38,9 @@
                 <h1>Thriller</h1>
                 <div class="content">
                     <div class="scroller">
-                        <button id="t_left"><</button>
+                        <button id="t_left">&lt;</button>
                         <div id="thriller" class="row"></div>
-                        <button id="t_right">></button>
+                        <button id="t_right">&gt;</button>
                     </div>
                 </div>
             </div>
@@ -44,9 +48,9 @@
                 <h1>Horreur</h1>
                 <div class="content">
                     <div class="scroller">
-                        <button id="h_left"><</button>
+                        <button id="h_left">&lt;</button>
                         <div id="horror" class="row"></div>
-                        <button id="h_right">></button>
+                        <button id="h_right">&gt;</button>
                     </div>
                 </div>
             </div>
@@ -56,10 +60,10 @@
         <div class="modal_bloc">
             <div class="modal_header">
                 <div class="modal_picture_contener">
-                    <img id="modal_movie_picture" src = "" alt="Just stream it !">
+                    <img id="modal_movie_picture" src = "/./.:0" alt="Just stream it !">
                 </div>
                 <div class="modal_header_infos">
-                    <h1 id="modal_title"></h1>
+                    <h1 id="modal_title">empty</h1>
                     <p id="modal_duration"></p>
                     <p id="modal_genre"></p>
                     <p id="modal_date"></p>

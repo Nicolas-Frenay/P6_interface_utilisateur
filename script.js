@@ -10,7 +10,7 @@ let thriller = document.getElementById('thriller');
 
 let horror = document.getElementById('horror');
 
-// array to store best rated movie
+// array to store the best rated movie
 let best_movie =[]
 //array to store categories elements to be displayed
 let elements = [top_ratings, comedy, thriller, horror]
@@ -54,7 +54,7 @@ function get_movies (nb_movies, url, target){
 }
 
 
-//function to had movies info into movies array
+//function to had movies infos into movies array
 function movies_parsing(nb_movies, data, target){
     for (movie of data){
         if (movies[target].length < nb_movies) {
@@ -70,33 +70,15 @@ function move_best_movie(){
 
     movies[0].shift();
 
-    contener = document.createElement('span');
-    contener.setAttribute('class', 'contener');
+    contener = document.getElementById('best_rated');
+    img = document.getElementById('best_movie_picture');
 
-    h1 = document.createElement('h1');
-    h1.textContent = "Meilleur film";
-
-    contener.appendChild(h1);
-
-    let img = document.createElement('img');
     img.setAttribute('src',best_movie[0].image_url);
     img.setAttribute("id", best_movie[0].id)
     img.onclick = function (){
         movie_infos(img.id);
     }
-
-    contener.appendChild(img);
-    best_rated.appendChild(contener);
 }
-
-
-// function for looping through categories
-function parsing() {
-    for (i = 0; i < searchs.length; i++) {
-        get_movies(searchs[i][0], api_url + searchs[i][1], i);
-    }
-}
-
 
 //function to create elements for displaying movies
 function create_display(target){
@@ -160,10 +142,6 @@ h_right.onclick = function (){
 }
 
 
-function main(){
-    parsing()
-}
-
 //loading content in modal window
 function movie_infos(id){
     let modal = document.getElementById('modal');
@@ -175,8 +153,9 @@ function movie_infos(id){
         modal.style.display = "none";
     }
 
+    //closing modal window if user click outside of it
     window.onclick = function(event) {
-        if (event.target == modal) {
+        if (event.target === modal) {
             modal.style.display = "none";
         }
     }
@@ -221,7 +200,7 @@ function movie_infos(id){
                 box_office.textContent = 'Résultats au box-office (mondial) : '
                     + data.worldwide_gross_income.toLocaleString() + ' $';
             } else {
-                box_office.textContent = '';
+                box_office.textContent = 'Résultats au box-office : inconus';
             }
 
             let desc = document.getElementById('modal_description');
@@ -235,6 +214,15 @@ function movie_infos(id){
     request.send()
 }
 
+// function for looping through categories
+function parsing() {
+    for (i = 0; i < searchs.length; i++) {
+        get_movies(searchs[i][0], api_url + searchs[i][1], i);
+    }
+}
+
+function main(){
+    parsing()
+}
 
 main()
-
