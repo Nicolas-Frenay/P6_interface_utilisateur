@@ -8,8 +8,22 @@
 
 <body>
     <div id="bloc_page">
+        <header>
+            <div>
+                <p>
+                    Juste stream it !
+                </p>
+            </div>
+            <div class="navigation">
+                  <div><p>Acceuil</p></div>
+                  <div><p>Catégories</p></div>
+            </div>
+        </header>
         <div id="best_rated">
-            <h1>Meilleur film</h1>
+            <div>
+                <h1>Meilleur film</h1>
+                <h2 id="best_title"></h2>
+            </div>
             <img id="best_movie_picture" src = "none.svg" alt="Just stream it !">
 
         </div>
@@ -81,6 +95,7 @@
                 <p id="modal_description"></p>
             </div>
             <div class="btn_contener">
+                <button class="modal_play"> Lecture ▶︎</button>
                 <button id="modal_close">Close</button>
             </div>
         </div>

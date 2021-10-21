@@ -1,7 +1,5 @@
 let api_url = 'http://localhost:8000/api/v1/titles/';
 
-let best_rated = document.getElementById('best_rated');
-
 let top_ratings = document.getElementById('top_ratings');
 
 let comedy = document.getElementById('comedy');
@@ -70,9 +68,9 @@ function move_best_movie(){
 
     movies[0].shift();
 
-    contener = document.getElementById('best_rated');
-    img = document.getElementById('best_movie_picture');
-
+    let img = document.getElementById('best_movie_picture');
+    let title = document.getElementById('best_title');
+    title.textContent = best_movie[0].title
     img.setAttribute('src',best_movie[0].image_url);
     img.setAttribute("id", best_movie[0].id)
     img.onclick = function (){
@@ -184,7 +182,11 @@ function movie_infos(id){
             country.textContent = 'Pays : ' + data.countries;
 
             let rated = document.getElementById('modal_rated');
-            rated.textContent = 'Classement : ' + data.rated;
+            if (data.rated === 'Not rated or unkown rating'){
+                rated.textContent = "Classement inconnu";
+            }else{
+                rated.textContent = 'Classement : ' + data.rated;
+            }
 
             let imdb = document.getElementById('modal_imdb');
             imdb.textContent = 'IMDB : ' + data.imdb_score;
