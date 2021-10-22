@@ -207,7 +207,7 @@ function movie_infos(id){
             if (data.long_description.length > 1) {
                 desc.textContent = "Résumé : " + data.long_description;
             } else {
-                desc.textContent = "Aucun résumé disponible"
+                desc.textContent = "Aucun résumé disponible";
             }
         }
     }
