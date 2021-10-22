@@ -24,29 +24,24 @@ let searchs = [
 ];
 
 // function to request movies from API
-function get_movies (nb_movies, url, target){
-    let request = new XMLHttpRequest();
-
-    request.open('GET', url, true);
-    request.onload = function () {
-        let data = JSON.parse(request.response);
-        if (request.status === 200) {
-            let results = data.results;
-            movies_parsing(nb_movies, results, target);
-        }
+async function get_movies (nb_movies, url, target){
+    let response = await fetch(url);
+    if (response.status === 200) {
+        let data = await response.json();
+        let results = data.results;
+        movies_parsing(nb_movies, results, target);
         // check to see if all movies have been parsed
-        if (movies[target].length < nb_movies){
+        if (movies[target].length < nb_movies) {
             url = data.next;
             get_movies(nb_movies, url, target)
-        }else{
+        } else {
             // if getting top rated movies, move the best one
-            if (target === 0){
+            if (target === 0) {
                 move_best_movie();
             }
             create_display(target);
         }
     }
-    request.send();
 }
 
 
@@ -139,7 +134,7 @@ h_right.onclick = function (){
 
 
 //loading content in modal window
-function movie_infos(id){
+async function movie_infos(id){
     let modal = document.getElementById('modal');
     let btn = document.getElementById('modal_close');
 
@@ -156,62 +151,58 @@ function movie_infos(id){
         }
     }
 
-    let request = new XMLHttpRequest();
-    request.open('GET', api_url + id, true);
-    request.onload = function () {
-        let data = JSON.parse(request.response);
-        if (request.status === 200) {
-            let picture = document.getElementById('modal_movie_picture');
-            picture.setAttribute('src', data.image_url);
+    let response = await fetch(api_url+id)
+    if (response.status === 200) {
+        let data = await response.json()
+        let picture = document.getElementById('modal_movie_picture');
+        picture.setAttribute('src', data.image_url);
 
-            let title = document.getElementById('modal_title');
-            title.textContent = data.title;
+        let title = document.getElementById('modal_title');
+        title.textContent = data.title;
 
-            let duration = document.getElementById('modal_duration');
-            duration.textContent = data.duration + ' minutes'
+        let duration = document.getElementById('modal_duration');
+        duration.textContent = data.duration + ' minutes'
 
-            let genre = document.getElementById('modal_genre');
-            genre.textContent = data.genres
+        let genre = document.getElementById('modal_genre');
+        genre.textContent = data.genres
 
-            let date = document.getElementById('modal_date');
-            date.textContent = data.year;
+        let date = document.getElementById('modal_date');
+        date.textContent = data.year;
 
-            let country = document.getElementById('modal_country');
-            country.textContent = 'Pays : ' + data.countries;
+        let country = document.getElementById('modal_country');
+        country.textContent = 'Pays : ' + data.countries;
 
-            let rated = document.getElementById('modal_rated');
-            if (data.rated === 'Not rated or unkown rating'){
-                rated.textContent = "Classement inconnu";
-            }else{
-                rated.textContent = 'Classement : ' + data.rated;
-            }
+        let rated = document.getElementById('modal_rated');
+        if (data.rated === 'Not rated or unkown rating'){
+            rated.textContent = "Classement inconnu";
+        }else{
+            rated.textContent = 'Classement : ' + data.rated;
+        }
 
-            let imdb = document.getElementById('modal_imdb');
-            imdb.textContent = 'IMDB : ' + data.imdb_score;
+        let imdb = document.getElementById('modal_imdb');
+        imdb.textContent = 'IMDB : ' + data.imdb_score;
 
-            let director = document.getElementById('modal_director');
-            director.textContent = 'réalisateur(s) : ' + data.directors;
+        let director = document.getElementById('modal_director');
+        director.textContent = 'réalisateur(s) : ' + data.directors;
 
-            let actors = document.getElementById('modal_actors');
-            actors.textContent = 'Comédien(ne)s : ' + data.actors;
+        let actors = document.getElementById('modal_actors');
+        actors.textContent = 'Comédien(ne)s : ' + data.actors;
 
-            let box_office = document.getElementById('modal_box_office');
-            if (data.worldwide_gross_income) {
-                box_office.textContent = 'Résultats au box-office (mondial) : '
-                    + data.worldwide_gross_income.toLocaleString() + ' $';
-            } else {
-                box_office.textContent = 'Résultats au box-office : inconus';
-            }
+        let box_office = document.getElementById('modal_box_office');
+        if (data.worldwide_gross_income) {
+            box_office.textContent = 'Résultats au box-office (mondial) : '
+                + data.worldwide_gross_income.toLocaleString() + ' $';
+        } else {
+            box_office.textContent = 'Résultats au box-office : inconus';
+        }
 
-            let desc = document.getElementById('modal_description');
-            if (data.long_description.length > 1) {
-                desc.textContent = "Résumé : " + data.long_description;
-            } else {
-                desc.textContent = "Aucun résumé disponible"
-            }
+        let desc = document.getElementById('modal_description');
+        if (data.long_description.length > 1) {
+            desc.textContent = "Résumé : " + data.long_description;
+        } else {
+            desc.textContent = "Aucun résumé disponible";
         }
     }
-    request.send()
 }
 
 // main function : looping through categories
