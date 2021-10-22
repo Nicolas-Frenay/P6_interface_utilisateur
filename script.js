@@ -1,5 +1,7 @@
 let api_url = 'http://localhost:8000/api/v1/titles/';
 
+let best_rated = document.getElementById('best_rated');
+
 let top_ratings = document.getElementById('top_ratings');
 
 let comedy = document.getElementById('comedy');
@@ -7,6 +9,11 @@ let comedy = document.getElementById('comedy');
 let thriller = document.getElementById('thriller');
 
 let horror = document.getElementById('horror');
+
+let modal_picture = document.createElement('img');
+modal_picture.setAttribute('id', 'modal_movie_picture');
+let modal_picture_contener = document.getElementById('modal_picture');
+modal_picture_contener.appendChild(modal_picture);
 
 // array to store the best rated movie
 let best_movie =[]
@@ -61,7 +68,7 @@ function move_best_movie(){
 
     movies[0].shift();
 
-    let img = document.getElementById('best_movie_picture');
+    let img = document.createElement('img');
     let title = document.getElementById('best_title');
     title.textContent = best_movie[0].title
     img.setAttribute('src',best_movie[0].image_url);
@@ -69,6 +76,7 @@ function move_best_movie(){
     img.onclick = function (){
         movie_infos(img.id);
     }
+    best_rated.appendChild(img)
 }
 
 //function to create elements for displaying movies
@@ -154,8 +162,9 @@ async function movie_infos(id){
     let response = await fetch(api_url+id)
     if (response.status === 200) {
         let data = await response.json()
-        let picture = document.getElementById('modal_movie_picture');
-        picture.setAttribute('src', data.image_url);
+        let img = document.getElementById('modal_movie_picture');
+        img.setAttribute('src', data.image_url);
+        modal_picture_contener.appendChild(img);
 
         let title = document.getElementById('modal_title');
         title.textContent = data.title;
