@@ -25,8 +25,6 @@ let searchs = [
 
 // function to request movies from API
 function get_movies (nb_movies, url, target){
-    // index for parsing next page if needed
-    page_to_search = nb_movies%5;
     let request = new XMLHttpRequest();
 
     request.open('GET', url, true);
@@ -216,15 +214,11 @@ function movie_infos(id){
     request.send()
 }
 
-// function for looping through categories
-function parsing() {
+// main function : looping through categories
+function main() {
     for (i = 0; i < searchs.length; i++) {
         get_movies(searchs[i][0], api_url + searchs[i][1], i);
     }
-}
-
-function main(){
-    parsing()
 }
 
 main()
